@@ -50,7 +50,7 @@ public class RaycastShootComplete : MonoBehaviour {
 
 	void FixedUpdate ()
 	{
-		paused = this.GetComponent<UnityStandardAssets.Vehicles.Aeroplane.AeroplaneUserControl4Axis>().dead || this.GetComponent<UnityStandardAssets.Vehicles.Aeroplane.AeroplaneUserControl4Axis>().menu || this.GetComponent<UnityStandardAssets.Vehicles.Aeroplane.AeroplaneUserControl4Axis>().PAUSED_AT_ALL;
+		paused = this.GetComponent<UnityStandardAssets.Vehicles.Aeroplane.AeroplaneUserControl4Axis>().dead || this.GetComponent<UnityStandardAssets.Vehicles.Aeroplane.AeroplaneUserControl4Axis>().menu;
 		if (gunOverheat > 0 && (!paused)) { 
 			gunOverheat += gunOverheatSubtractor;
 		}

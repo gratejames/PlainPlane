@@ -18,7 +18,7 @@ public class ShootableCar : MonoBehaviour {
 		HUDManager = hud.GetComponent<HUDManager>();
 	}
 
-	void Update() {
+	void FixedUpdate() {
 		if (currentHealth > 0) 
 		{
 			pos = this.transform.position;

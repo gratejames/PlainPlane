@@ -7,8 +7,6 @@ namespace UnityStandardAssets.Vehicles.Aeroplane
 	[RequireComponent(typeof (AeroplaneController))]
 	public class AeroplaneUserControl4Axis : MonoBehaviour
 	{
-		public bool PAUSED_AT_ALL = false;
-
 		// these max angles are only used on mobile, due to the way pitch and roll input are handled
 		public float maxRollAngle = 80;
 		public float maxPitchAngle = 80;
@@ -31,20 +29,25 @@ namespace UnityStandardAssets.Vehicles.Aeroplane
 
 		private void Awake()
 		{
-			Time.timeScale = 1;
 			// Set up the reference to the aeroplane controller.
 			m_Aeroplane = GetComponent<AeroplaneController>();
 			landinggear = GetComponent<LandingGear>();
 		}
 
-
-		private void FixedUpdate()
-		{
-			if (PAUSED_AT_ALL) {
+		private void Update() {
+			if (Input.GetButtonDown("Pause")) {
+				menu = !menu;
+			}
+			if (menu) {
 				Time.timeScale = 0;
+				MenuPanel.gameObject.SetActive(true);
 			} else {
 				Time.timeScale = 1;
+				MenuPanel.gameObject.SetActive(false);
 			}
+		}
+		private void FixedUpdate()
+		{
 			// Read input for the pitch, yaw, roll and throttle of the aeroplane.
 			float roll = CrossPlatformInputManager.GetAxis("Roll");
 			float pitch = CrossPlatformInputManager.GetAxis("Pitch");
@@ -58,7 +61,7 @@ namespace UnityStandardAssets.Vehicles.Aeroplane
 		AdjustInputForMobileControls(ref roll, ref pitch, ref m_Throttle);
 #endif
 			// Pass the input to the aeroplane
-			if ((!dead) && (!menu) && !(PAUSED_AT_ALL)) {
+			if ((!dead) && (!menu)) {
 				m_Aeroplane.Move(roll, pitch, m_Yaw, m_Throttle, m_AirBrakes);
 			}
 		}
@@ -100,8 +103,6 @@ namespace UnityStandardAssets.Vehicles.Aeroplane
 				if ((Mathf.Round(speed) == 0) && (menuAcnowledged == false) && (!dead)) {
 					menuAcnowledged = true;
 					menu = true;
-					PAUSED_AT_ALL = true;
-					MenuPanel.gameObject.SetActive(true);
 				}
 			}
 		}
@@ -110,9 +111,6 @@ namespace UnityStandardAssets.Vehicles.Aeroplane
 		}
 		public void Resume() {
 			menu = false;
-			PAUSED_AT_ALL = false;
-			Time.timeScale = 1;
-			MenuPanel.gameObject.SetActive(false);
 		}
 		void Die() {
 			// Debug.Log("You crashed! :)");
