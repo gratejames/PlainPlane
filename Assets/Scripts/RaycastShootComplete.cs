@@ -5,11 +5,11 @@ using System.Collections.Generic;
 
 public class RaycastShootComplete : MonoBehaviour {
 
-	[Header("Gun Missle")]
+	[Header("Gun")]
 	private bool gunOverheated = false;
-	public float gunOverheatSubtractor = -0.5f;								// Set the number of hitpoints that this gun will take away from shot objects with a health script
-	public float gunOverheatAdder = 1f;										// Set the number of hitpoints that this gun will take away from shot objects with a health script
-	public float gunOverheatMax = 10f;										// Set the number of hitpoints that this gun will take away from shot objects with a health script
+	public float gunOverheatSubtractor = -0.5f;								// Is the gun overheated
+	public float gunOverheatAdder = 1f;										// How slowly does the overheat fall (should be negative)
+	public float gunOverheatMax = 10f;										// How fast it rises (Should be greater than above)
 	public float gunDamage = 1f;											// Set the number of hitpoints that this gun will take away from shot objects with a health script
 	public float gunFireRate = 0.25f;										// Number in seconds which controls how often the player can fire
 	private float gunNextFire;												// Float to store the time the player will be allowed to fire again, after firing
@@ -23,9 +23,13 @@ public class RaycastShootComplete : MonoBehaviour {
 	public float missleNextFire;											// Float to store the time the player will be allowed to fire again, after firing
 	public float missleForce = 500f;									 	// Amount of force which will be added to objects with a rigidbody shot by the player
 	public Transform Missle;												// Holds a reference to the gun end object, marking the muzzle location of the gun
+	public MissleLeft MissleLeft;
+	public MissleRight MissleRight;
+
 
 	[Header("Rocket Setting")]
 	public int rocketDamage = 4;											// Set the number of hitpoints that this gun will take away from shot objects with a health script
+	public int rocketReloadMultiplier = 2;									// The number of times of missleFireRate the reload will take after this.
 	public int rocketReloadRequirments = 6;
 	public int rocketProgress;
 	public float rocketForce = 500f;									 	// Amount of force which will be added to objects with a rigidbody shot by the player
@@ -41,16 +45,21 @@ public class RaycastShootComplete : MonoBehaviour {
 
 	private bool paused;
 
+	private UnityStandardAssets.Vehicles.Aeroplane.AeroplaneUserControl4Axis PlaneControlComponent;
+
 	void Start () 
 	{
 		laserLine = GetComponent<LineRenderer>();
 		gunAudio = GetComponent<AudioSource>();
+		PlaneControlComponent = GetComponent<UnityStandardAssets.Vehicles.Aeroplane.AeroplaneUserControl4Axis>();
+		MissleLeft = GameObject.Find("LeftMissleObj").GetComponent<MissleLeft>();
+		MissleRight = GameObject.Find("RightMissleObj").GetComponent<MissleRight>();
 	}
 
 
 	void FixedUpdate ()
 	{
-		paused = this.GetComponent<UnityStandardAssets.Vehicles.Aeroplane.AeroplaneUserControl4Axis>().dead || this.GetComponent<UnityStandardAssets.Vehicles.Aeroplane.AeroplaneUserControl4Axis>().menu;
+		paused = PlaneControlComponent.dead || PlaneControlComponent.menu;
 		if (gunOverheat > 0 && (!paused)) { 
 			gunOverheat += gunOverheatSubtractor;
 		}
@@ -71,11 +80,14 @@ public class RaycastShootComplete : MonoBehaviour {
 			if (Physics.Raycast (rayOrigin, fpsCam.transform.forward, out hit, weaponRange))
 			{
 				laserLine.SetPosition(1, hit.point);
+
 				ShootableBox health1 = hit.collider.GetComponent<ShootableBox>();
 				ShootableCar health2 = hit.collider.GetComponent<ShootableCar>();
+				ShootableAA  health3 = hit.collider.GetComponent<ShootableAA>();
 
 				if (health1 != null) { health1.Damage(gunDamage); }
 				if (health2 != null) { health2.Damage(gunDamage); }
+				if (health3 != null) { health3.Damage(gunDamage); }
 
 				if (hit.rigidbody != null)
 				{
@@ -86,30 +98,39 @@ public class RaycastShootComplete : MonoBehaviour {
 		}
 		if (Input.GetButton("Missle") && (Time.time > missleNextFire) && (!paused))
 		{
-			missleNextFire = Time.time + missleFireRate;
-			StartCoroutine(ShotEffect());
-			Vector3 rayOrigin = fpsCam.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0.0f));
-			RaycastHit hit;
-			laserLine.SetPosition (0, Missle.position);
-			if (Physics.Raycast (rayOrigin, fpsCam.transform.forward, out hit, weaponRange))
-			{
-				laserLine.SetPosition(1, hit.point);
-				ShootableBox health1 = hit.collider.GetComponent<ShootableBox>();
-				ShootableCar health2 = hit.collider.GetComponent<ShootableCar>();
+			// missleNextFire = Time.time + missleFireRate;
 
-				if (health1 != null) { health1.Damage(missleDamage); }
-				if (health2 != null) { health2.Damage(missleDamage); }
-
-				if (hit.rigidbody != null)
-				{
-					hit.rigidbody.AddForce (-hit.normal * missleForce);
-				}
+			if (!MissleLeft.Flying) {
+				MissleLeft.shoot();
+   				missleNextFire = Time.time + missleFireRate;
+			} else if (!MissleRight.Flying){
+				MissleRight.shoot();
+   				missleNextFire = Time.time + missleFireRate;
 			}
-			else {laserLine.SetPosition (1, rayOrigin + (fpsCam.transform.forward * weaponRange));}
+
+			// StartCoroutine(ShotEffect());
+			// Vector3 rayOrigin = fpsCam.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0.0f));
+			// RaycastHit hit;
+			// laserLine.SetPosition (0, Missle.position);
+			// if (Physics.Raycast (rayOrigin, fpsCam.transform.forward, out hit, weaponRange))
+			// {
+			// 	laserLine.SetPosition(1, hit.point);
+			// 	ShootableBox health1 = hit.collider.GetComponent<ShootableBox>();
+			// 	ShootableCar health2 = hit.collider.GetComponent<ShootableCar>();
+
+			// 	if (health1 != null) { health1.Damage(missleDamage); }
+			// 	if (health2 != null) { health2.Damage(missleDamage); }
+
+			// 	if (hit.rigidbody != null)
+			// 	{
+			// 		hit.rigidbody.AddForce (-hit.normal * missleForce);
+			// 	}
+			// }
+			// else {laserLine.SetPosition (1, rayOrigin + (fpsCam.transform.forward * weaponRange));}
 		}
 		if (Input.GetButton("RocketReload") && (Time.time > missleNextFire) && (rocketProgress < rocketReloadRequirments) && (!paused)) {
 			rocketProgress += 1;
-			missleNextFire = Time.time + missleFireRate;
+			missleNextFire = Time.time + missleFireRate*rocketReloadMultiplier;
 		}
 		if (Input.GetButton("Rocket") && (rocketProgress >= rocketReloadRequirments) && (!paused))
 		{
@@ -123,9 +144,11 @@ public class RaycastShootComplete : MonoBehaviour {
 				laserLine.SetPosition(1, hit.point);
 				ShootableBox health1 = hit.collider.GetComponent<ShootableBox>();
 				ShootableCar health2 = hit.collider.GetComponent<ShootableCar>();
+				ShootableAA  health3 = hit.collider.GetComponent<ShootableAA>();
 
 				if (health1 != null) { health1.Damage(rocketDamage); }
 				if (health2 != null) { health2.Damage(rocketDamage); }
+				if (health3 != null) { health3.Damage(rocketDamage); }
 
 				if (hit.rigidbody != null)
 				{
