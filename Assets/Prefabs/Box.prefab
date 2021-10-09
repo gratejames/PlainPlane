@@ -379,6 +379,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67aaa83d827ab4143bca2e696e29b087, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Died: 0
   Health_Foreground: {fileID: 4442703160959727895}
   Health_Background: {fileID: 4442703161979224306}
   Health_Value: 5

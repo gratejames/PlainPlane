@@ -28,18 +28,42 @@ namespace UnityStandardAssets.Vehicles.Aeroplane
 		//private AeroplaneController m_Plane;
 		private float nextFire;
 
+		public GameObject hud;
+		public Transform MobilePanel;
+		public MobileButtons GearBtn;
+		public bool Mobile;
+
 		// Use this for initialization
 		private void Start()
 		{
 			//m_Plane = GetComponent<AeroplaneController>();
 			m_Animator = GetComponent<Animator>();
 			//m_Rigidbody = GetComponent<Rigidbody>();
+			hud = GameObject.Find("/HUD");
+			MobilePanel = hud.transform.Find("MobilePanel");
+			GearBtn = MobilePanel.transform.Find("GearButton").GetComponent<MobileButtons>();
+			GearBtn.toggledState = true;
+			Mobile = GameObject.Find("INFO_OBJECT").GetComponent<INFO_SCRIPT>().MOBILE_CONTROLS_ENABLED;
+
 		}
 
 		// Update is called once per frame
 
 		private void Update()
 		{
+			if (Mobile && Time.time > nextFire)
+			{
+				if (GearBtn.toggledState)
+				{
+					m_State = GearState.Lowered;
+					lowered = true;
+				}
+				else
+				{
+					m_State = GearState.Raised;
+					lowered = false;
+				}
+			}
 			if (Input.GetButtonDown("LandingGear") && Time.time > nextFire) {
 				if (m_State == GearState.Raised) {
 					m_State = GearState.Lowered;

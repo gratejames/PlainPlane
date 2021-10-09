@@ -18,6 +18,8 @@ namespace UnityStandardAssets.CrossPlatformInput
 		public AxisOption axesToUse = AxisOption.Both; // The options for the axes that the still will use
 		public string horizontalAxisName = "Horizontal"; // The name given to the horizontal axis for the cross platform input
 		public string verticalAxisName = "Vertical"; // The name given to the vertical axis for the cross platform input
+		public float vertical = 0;
+		public float horizontal = 0;
 
 		Vector3 m_StartPos;
 		bool m_UseX; // Toggle for using the x axis
@@ -42,11 +44,13 @@ namespace UnityStandardAssets.CrossPlatformInput
 			delta /= MovementRange;
 			if (m_UseX)
 			{
+				horizontal = delta.x;
 				m_HorizontalVirtualAxis.Update(-delta.x);
 			}
 
 			if (m_UseY)
 			{
+				vertical = delta.y;
 				m_VerticalVirtualAxis.Update(delta.y);
 			}
 		}

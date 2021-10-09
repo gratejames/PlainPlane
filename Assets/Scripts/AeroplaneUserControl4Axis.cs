@@ -39,12 +39,21 @@ namespace UnityStandardAssets.Vehicles.Aeroplane
 		public float   Health_StartingPosX;
 		public Vector2 Health_StartingPos;
 
+		private bool Mobile;
+
+        private GameObject hud;
+		public Transform MobilePanel;
+
+		public Joystick stick;
+		public MobileButtons AirbrakeBtn;
+
+
 		private void Awake()
 		{
 			// Set up the reference to the aeroplane controller.
 			m_Aeroplane = GetComponent<AeroplaneController>();
 			landinggear = GetComponent<LandingGear>();
-			var hud = GameObject.Find("/HUD");
+			hud = GameObject.Find("/HUD");
 			Health_Foreground = hud.transform.Find("HPSliderFg").GetComponent<Image>();
 			Health_Background = hud.transform.Find("HPSliderBg").GetComponent<Image>();
 			Health_StartingPos = Health_Foreground.rectTransform.localPosition;
@@ -52,6 +61,10 @@ namespace UnityStandardAssets.Vehicles.Aeroplane
 			// Health_StartingPosX = Health_StartingPos.x;
 			Health_FullWidth = Health_Background.rectTransform.sizeDelta.x;
 			Damage(0);
+			Mobile = GameObject.Find("INFO_OBJECT").GetComponent<INFO_SCRIPT>().MOBILE_CONTROLS_ENABLED;
+			MobilePanel = hud.transform.Find("MobilePanel");
+			stick = MobilePanel.transform.Find("Joystick").GetComponent<Joystick>();
+			AirbrakeBtn = MobilePanel.transform.Find("AirbrakeButton").GetComponent<MobileButtons>();
 		}
 
 		private void Update() {
@@ -75,11 +88,21 @@ namespace UnityStandardAssets.Vehicles.Aeroplane
 		private void FixedUpdate()
 		{
 			// Read input for the pitch, yaw, roll and throttle of the aeroplane.
-			float roll = CrossPlatformInputManager.GetAxis("Roll");
-			float pitch = CrossPlatformInputManager.GetAxis("Pitch");
+			float roll = 0f;
+			float pitch = 0f;
+            if (Mobile) {
+				pitch = stick.vertical/2;
+				roll = -stick.horizontal/2;
+				m_AirBrakes = AirbrakeBtn.toggledState;
+			}
+			else
+            {
+				roll = CrossPlatformInputManager.GetAxis("Roll");
+				pitch = CrossPlatformInputManager.GetAxis("Pitch");
+				m_AirBrakes = CrossPlatformInputManager.GetButton("Airbrake");
+			}
 			//float roll = CrossPlatformInputManager.GetAxis("Mouse X");
 			//float pitch = CrossPlatformInputManager.GetAxis("Mouse Y");
-			m_AirBrakes = CrossPlatformInputManager.GetButton("Airbrake");
 			m_Yaw = CrossPlatformInputManager.GetAxis("Yaw");
 			m_Throttle = CrossPlatformInputManager.GetAxis("Throttle");
 

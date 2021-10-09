@@ -59,10 +59,10 @@ public class HUDManager : MonoBehaviour
 
 	[Header("Mobile")]
 	public GameObject Mobile_Slider;
-	public GameObject Mobile_Top;
-	public MobileButtons Mobile_TopScript;
-	public GameObject Mobile_Bottom;
-	public MobileButtons Mobile_BottomScript;
+	//public GameObject Mobile_Top;
+	//public MobileButtons Mobile_TopScript;
+	//public GameObject Mobile_Bottom;
+	//public MobileButtons Mobile_BottomScript;
 	private Slider Mobile_SliderComponent;
 
 	[Header("Counter")]
@@ -89,8 +89,8 @@ public class HUDManager : MonoBehaviour
 		CarsDispComponent			=		CarsDisp.GetComponent<UnityEngine.UI.Text>();
 		BoxDispComponent			=		BoxDisp .GetComponent<UnityEngine.UI.Text>();
 
-		Mobile_TopScript 			= 		Mobile_Top.GetComponent<MobileButtons>();
-		Mobile_BottomScript 		= 		Mobile_Bottom.GetComponent<MobileButtons>();
+		//Mobile_TopScript 			= 		Mobile_Top.GetComponent<MobileButtons>();
+		//Mobile_BottomScript 		= 		Mobile_Bottom.GetComponent<MobileButtons>();
 		Mobile_SliderComponent		=		Mobile_Slider.GetComponent<Slider>();
 
 		Plane_Controller 			= 		plane.GetComponent<AeroplaneController>();
@@ -125,18 +125,20 @@ public class HUDManager : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		if (Mobile) {
-			Plane_Controller.Throttle = Mobile_SliderComponent.value;
-			if (Mobile_TopScript.selected) {
-				Debug.Log("PRESSED");
-				//CrossPlatformInputManager.SetAxis("Pitch", CrossPlatformInputManager.GetAxis("Pitch") + 0.1f);
-			}
-			// if (Mobile_BottomScript.selected) {
-			// 	CrossPlatformInputManager.SetAxis("Pitch", CrossPlatformInputManager.GetAxis("Pitch") - 0.1f);
-			// }
-		}
+        if (Mobile)
+        {
+            Plane_Controller.Throttle = Mobile_SliderComponent.value;
+            //	if (Mobile_TopScript.selected) {
+            //              Debug.Log("PRESSED");
+            //              CrossPlatformInputManager.SetAxis("Pitch", CrossPlatformInputManager.GetAxis("Pitch") + 0.1f);
+            //          }
+            //          if (Mobile_BottomScript.selected)
+            //          {
+            //              CrossPlatformInputManager.SetAxis("Pitch", CrossPlatformInputManager.GetAxis("Pitch") - 0.1f);
+            //          }
+        }
 
-		TimeTextComponent.text = (Mathf.Round(Time.timeSinceLevelLoad*10)/10).ToString();
+        TimeTextComponent.text = (Mathf.Round(Time.timeSinceLevelLoad*10)/10).ToString();
 		SpeedComponent.text = ("Speed: " + Mathf.Round(RigidBody.velocity.magnitude).ToString());
 		AltitudeComponent.text = ("Altitude: " + Mathf.Round(Plane_Controller.Altitude).ToString());
 		ThrottleComponent.text = ("%: " + Mathf.Round(Plane_Controller.Throttle*100).ToString());

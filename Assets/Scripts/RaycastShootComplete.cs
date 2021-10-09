@@ -47,6 +47,16 @@ public class RaycastShootComplete : MonoBehaviour {
 
 	private UnityStandardAssets.Vehicles.Aeroplane.AeroplaneUserControl4Axis PlaneControlComponent;
 
+	private bool Mobile;
+
+	private GameObject hud;
+	public Transform MobilePanel;
+
+	public MobileButtons ShootBtn;
+	public MobileButtons MissleBtn;
+	public MobileButtons ReloadBtn;
+	public MobileButtons RocketBtn;
+
 	void Start () 
 	{
 		laserLine = GetComponent<LineRenderer>();
@@ -54,6 +64,15 @@ public class RaycastShootComplete : MonoBehaviour {
 		PlaneControlComponent = GetComponent<UnityStandardAssets.Vehicles.Aeroplane.AeroplaneUserControl4Axis>();
 		MissleLeft = GameObject.Find("LeftMissleObj").GetComponent<MissleLeft>();
 		MissleRight = GameObject.Find("RightMissleObj").GetComponent<MissleRight>();
+
+		Mobile = GameObject.Find("INFO_OBJECT").GetComponent<INFO_SCRIPT>().MOBILE_CONTROLS_ENABLED;
+		hud = GameObject.Find("/HUD");
+		MobilePanel = hud.transform.Find("MobilePanel");
+
+		ShootBtn = MobilePanel.transform.Find("ShootButton").GetComponent<MobileButtons>();
+		MissleBtn = MobilePanel.transform.Find("MissleButton").GetComponent<MobileButtons>();
+		ReloadBtn = MobilePanel.transform.Find("RocketReloadButton").GetComponent<MobileButtons>();
+		RocketBtn = MobilePanel.transform.Find("RocketButton").GetComponent<MobileButtons>();
 	}
 
 
@@ -69,7 +88,8 @@ public class RaycastShootComplete : MonoBehaviour {
 		if (gunOverheated == true && gunOverheat <= 0) {
 			gunOverheated = false;
 		}
-		if (Input.GetButton("Shoot") && (Time.time > gunNextFire) && (gunOverheated == false) && (!paused)) 
+		Debug.Log(ShootBtn.selected);
+		if ((Input.GetButton("Shoot") || ShootBtn.selected) && (Time.time > gunNextFire) && (gunOverheated == false) && (!paused)) 
 		{
 			gunOverheat += gunOverheatAdder;
 			gunNextFire = Time.time + gunFireRate;
@@ -96,7 +116,7 @@ public class RaycastShootComplete : MonoBehaviour {
 			}
 			else {laserLine.SetPosition (1, rayOrigin + (fpsCam.transform.forward * weaponRange));}
 		}
-		if (Input.GetButton("Missle") && (Time.time > missleNextFire) && (!paused))
+		if ((Input.GetButton("Missle") || MissleBtn.selected) && (Time.time > missleNextFire) && (!paused))
 		{
 			// missleNextFire = Time.time + missleFireRate;
 
@@ -128,11 +148,11 @@ public class RaycastShootComplete : MonoBehaviour {
 			// }
 			// else {laserLine.SetPosition (1, rayOrigin + (fpsCam.transform.forward * weaponRange));}
 		}
-		if (Input.GetButton("RocketReload") && (Time.time > missleNextFire) && (rocketProgress < rocketReloadRequirments) && (!paused)) {
+		if ((Input.GetButton("RocketReload") || ReloadBtn.selected) && (Time.time > missleNextFire) && (rocketProgress < rocketReloadRequirments) && (!paused)) {
 			rocketProgress += 1;
 			missleNextFire = Time.time + missleFireRate*rocketReloadMultiplier;
 		}
-		if (Input.GetButton("Rocket") && (rocketProgress >= rocketReloadRequirments) && (!paused))
+		if ((Input.GetButton("Rocket") || RocketBtn.selected) && (rocketProgress >= rocketReloadRequirments) && (!paused))
 		{
 			rocketProgress = 0;
 			StartCoroutine(ShotEffect());

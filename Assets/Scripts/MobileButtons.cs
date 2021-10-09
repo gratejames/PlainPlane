@@ -4,21 +4,20 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems; // Required when using Event data.
 
-public class MobileButtons : MonoBehaviour, IPointerDownHandler
+public class MobileButtons : MonoBehaviour
 {
 	public bool selected = false;
-	public void OnPointerDown(PointerEventData eventData)
+	public bool toggledState = false;
+	public void OnButtonDown()
 	{
 		selected = true;
-		Debug.Log("Button was selected");
+		toggledState = !toggledState;
+		//Debug.Log("Button was selected");
 	}
 
-	public void OnPointerUp(PointerEventData eventData)
+	public void OnButtonUp()
 	{
 		selected = false;
-		Debug.Log("Button was deselected");
+		//Debug.Log("Button was deselected");
 	}
-	// void Update(){
-	// 	Debug.Log(this.state);
-	// }
 }

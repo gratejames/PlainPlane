@@ -574,7 +574,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -140}
-  m_SizeDelta: {x: 320, y: 60}
+  m_SizeDelta: {x: 400, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &434747438
 MonoBehaviour:
@@ -1481,7 +1481,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: BETA 0.5.2 - The Landscape, Health, Minimap, and AA Update
+  m_Text: BETA 0.6 - Mobile Controls!
 --- !u!222 &782822411
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1603,7 +1603,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 20}
-  m_SizeDelta: {x: 320, y: 60}
+  m_SizeDelta: {x: 400, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &950850438
 MonoBehaviour:
@@ -1973,7 +1973,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -60}
-  m_SizeDelta: {x: 320, y: 60}
+  m_SizeDelta: {x: 400, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1190309291
 MonoBehaviour:
@@ -2622,7 +2622,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Mobile Controls (Experimental, not working)
+  m_Text: Mobile Controls
 --- !u!222 &1479947448
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3071,7 +3071,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: How To Play
+  m_Text: How To Play (And Settings)
 --- !u!222 &1560687655
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3662,10 +3662,6 @@ MonoBehaviour:
   MenuPanel: {fileID: 0}
   MobilePanel: {fileID: 0}
   Mobile_Slider: {fileID: 0}
-  Mobile_Top: {fileID: 0}
-  Mobile_TopScript: {fileID: 0}
-  Mobile_Bottom: {fileID: 0}
-  Mobile_BottomScript: {fileID: 0}
   CarsDisp: {fileID: 711282140}
   BoxDisp: {fileID: 0}
   Cars: 0
