@@ -46,6 +46,7 @@ namespace UnityStandardAssets.Vehicles.Aeroplane
 
 		public Joystick stick;
 		public MobileButtons AirbrakeBtn;
+		public MobileButtons PauseBtn;
 
 
 		private void Awake()
@@ -65,11 +66,19 @@ namespace UnityStandardAssets.Vehicles.Aeroplane
 			MobilePanel = hud.transform.Find("MobilePanel");
 			stick = MobilePanel.transform.Find("Joystick").GetComponent<Joystick>();
 			AirbrakeBtn = MobilePanel.transform.Find("AirbrakeButton").GetComponent<MobileButtons>();
+			PauseBtn = MobilePanel.transform.Find("MenuButton").GetComponent<MobileButtons>();
 		}
 
 		private void Update() {
-			if (Input.GetButtonDown("Pause")) {
-				menu = !menu;
+			if (Mobile) {
+				if (PauseBtn.selected) {
+					menu = true;
+				}
+			} else {
+				if (Input.GetButtonDown("Pause"))
+				{
+					menu = !menu;
+				}
 			}
 			if (menu) {
 				Time.timeScale = 0;

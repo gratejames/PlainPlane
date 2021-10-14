@@ -1481,7 +1481,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: BETA 0.6 - Mobile Controls!
+  m_Text: BETA 0.6.1 - Mobile Controls!
 --- !u!222 &782822411
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4092,6 +4092,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3433665352158734342, guid: 680e0b41d1c85bf4a813e4f48c284199,
+        type: 3}
+      propertyPath: MOBILE_CONTROLS_ENABLED
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3433665352158734343, guid: 680e0b41d1c85bf4a813e4f48c284199,
         type: 3}
