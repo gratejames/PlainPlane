@@ -146,7 +146,7 @@ public class HUDManager : MonoBehaviour
 		CarsDispComponent.text = (Cars.ToString());
 		BoxDispComponent.text = (Box.ToString());
 
-		if ((Cars + Box) == 0) {
+		if ((Cars + Box) <= 0) {
 			LargeMsgComponent.text = ("Success!");
 		} else {
 			LargeMsgComponent.text = ("Pause Menu");

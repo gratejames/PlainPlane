@@ -29,7 +29,6 @@ public class RaycastShootComplete : MonoBehaviour {
 
 	[Header("Rocket Setting")]
 	public int rocketDamage = 4;											// Set the number of hitpoints that this gun will take away from shot objects with a health script
-	public int rocketReloadMultiplier = 2;									// The number of times of missleFireRate the reload will take after this.
 	public int rocketReloadRequirments = 6;
 	public int rocketProgress;
 	public float rocketForce = 500f;									 	// Amount of force which will be added to objects with a rigidbody shot by the player
@@ -88,7 +87,6 @@ public class RaycastShootComplete : MonoBehaviour {
 		if (gunOverheated == true && gunOverheat <= 0) {
 			gunOverheated = false;
 		}
-		Debug.Log(ShootBtn.selected);
 		if ((Input.GetButton("Shoot") || ShootBtn.selected) && (Time.time > gunNextFire) && (gunOverheated == false) && (!paused)) 
 		{
 			gunOverheat += gunOverheatAdder;
@@ -150,7 +148,7 @@ public class RaycastShootComplete : MonoBehaviour {
 		}
 		if ((Input.GetButton("RocketReload") || ReloadBtn.selected) && (Time.time > missleNextFire) && (rocketProgress < rocketReloadRequirments) && (!paused)) {
 			rocketProgress += 1;
-			missleNextFire = Time.time + missleFireRate*rocketReloadMultiplier;
+			missleNextFire = Time.time + missleFireRate;
 		}
 		if ((Input.GetButton("Rocket") || RocketBtn.selected) && (rocketProgress >= rocketReloadRequirments) && (!paused))
 		{

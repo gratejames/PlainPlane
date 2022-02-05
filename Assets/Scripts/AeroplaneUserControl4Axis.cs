@@ -44,6 +44,8 @@ namespace UnityStandardAssets.Vehicles.Aeroplane
         private GameObject hud;
 		public Transform MobilePanel;
 
+		private HUDManager m_HUDManager;
+
 		public Joystick stick;
 		public MobileButtons AirbrakeBtn;
 		public MobileButtons PauseBtn;
@@ -55,6 +57,7 @@ namespace UnityStandardAssets.Vehicles.Aeroplane
 			m_Aeroplane = GetComponent<AeroplaneController>();
 			landinggear = GetComponent<LandingGear>();
 			hud = GameObject.Find("/HUD");
+			m_HUDManager = hud.GetComponent<HUDManager>();
 			Health_Foreground = hud.transform.Find("HPSliderFg").GetComponent<Image>();
 			Health_Background = hud.transform.Find("HPSliderBg").GetComponent<Image>();
 			Health_StartingPos = Health_Foreground.rectTransform.localPosition;
@@ -100,8 +103,8 @@ namespace UnityStandardAssets.Vehicles.Aeroplane
 			float roll = 0f;
 			float pitch = 0f;
             if (Mobile) {
-				pitch = stick.vertical/2;
-				roll = -stick.horizontal/2;
+				pitch = stick.vertical;// /2;
+				roll = -stick.horizontal;// /2;
 				m_AirBrakes = AirbrakeBtn.toggledState;
 			}
 			else
@@ -150,16 +153,16 @@ namespace UnityStandardAssets.Vehicles.Aeroplane
 
 				landingGearDown = landinggear.lowered;
 
-				if ((speed < 60) && (landingGearDown == true)) {
+				if ((vel.y < 8) && (landingGearDown == true)) {
 					//Debug.Log("You have landed!");
 				} else {
 					Die();
 				}
-				// if ((Mathf.Round(speed) == 0) && (menuAcnowledged == false) && (!dead)) {
-				// 	menuAcnowledged = true;
-				// 	menu = true;
-				// }
-			} else if (collision.gameObject.tag != "IgnorePlayerCollisions") {
+                if ((Mathf.Round(speed) == 0) && (menuAcnowledged == false) && (!dead) && (m_HUDManager.Cars + m_HUDManager.Box) == 0) {
+                    menuAcnowledged = true;
+                    menu = true;
+                }
+            } else if (collision.gameObject.tag != "IgnorePlayerCollisions") {
 				Die();
 				// Debug.Log(collision.gameObject.name);				
 			}
@@ -173,7 +176,6 @@ namespace UnityStandardAssets.Vehicles.Aeroplane
 		public void Damage(float damageAmount)
 		{
 			Health_Value -= damageAmount;
-			Debug.Log("Plane Hit!");
 
 			Health_Foreground.rectTransform.sizeDelta = new Vector2(map(0, Health_Max, 0, Health_FullWidth, Health_Value), 20);
 			Health_Foreground.rectTransform.localPosition = new Vector2((-(map(0, Health_Max, 0, Health_FullWidth, Health_Value))/2), 0) + Health_StartingPos;
